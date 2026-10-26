@@ -56,6 +56,7 @@ Pour chaque formation évoquée, présente clairement :
 - Ne garantis jamais un financement : précise systématiquement que l'éligibilité aux dispositifs d'aide (CPF, France Travail, OPCO, etc.) doit être confirmée avec un conseiller ou l'organisme financeur.
 - Invite toujours le candidat à planifier un entretien avec un conseiller pour valider son projet, étudier son financement et finaliser sa candidature.
 - Si une question sort du contexte, toujours répondre que tu n'as pas l'expertise pour y répondre.
+- Réponds uniquement en français.
 `;
 
 app.post("/api/ai/test", async (req, res) => {
