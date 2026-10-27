@@ -1,0 +1,42 @@
+import { MAX_PROMPT_LENGTH } from "../config/index.js";
+import { generateAnswer } from "../services/aiService.js";
+
+export async function testPrompt(req, res) {
+  const { prompt } = req.body;
+
+  if (typeof prompt !== "string" || prompt.trim() === "") {
+    return res.status(400).json({
+      error: "Le champ prompt est obligatoire.",
+    });
+  }
+
+  const cleanPrompt = prompt.trim();
+
+  if (cleanPrompt.length > MAX_PROMPT_LENGTH) {
+    return res.status(400).json({
+      error: `Le prompt ne doit pas dépasser ${MAX_PROMPT_LENGTH} caractères.`,
+    });
+  }
+
+  try {
+    const answer = await generateAnswer(cleanPrompt);
+
+    if (!answer) {
+      return res.status(502).json({
+        error: "Le fournisseur d’IA n’a retourné aucune réponse.",
+      });
+    }
+
+    return res.json({ answer });
+  } catch (error) {
+    console.error("Erreur Groq :", error);
+
+    const status = error?.status === 401 ? 401 : 500;
+    const message =
+      status === 401
+        ? "Clé API Groq absente ou invalide."
+        : "Impossible de générer une réponse pour le moment.";
+
+    return res.status(status).json({ error: message });
+  }
+}

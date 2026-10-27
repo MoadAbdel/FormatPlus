@@ -15,9 +15,18 @@ Vous devez travailler sur :
 
 ## Interdiction pédagogique
 
-Ne refactorez pas encore le projet.
+Le projet est désormais organisé dans `src/` :
 
-Le passage vers des routes, controllers et services sera réalisé au Jour 3.
+```text
+src/
+├── config/        # variables d'environnement, client Groq, prompt système
+├── controllers/   # logique des requêtes HTTP
+├── routes/        # définition des routes
+├── services/      # appels au fournisseur d'IA
+├── public/        # interface web
+├── app.js         # configuration Express
+└── server.js      # point d'entrée
+```
 
 ## Lancement
 
