@@ -1,14 +1,28 @@
-# Projet apprenant — TP n°2 : transformer le chatbot en assistant métier
+# Projet apprenant — TP n°3
 
-## Installation
+## Objectif
+
+Optimiser l’assistant métier construit pendant le TP n°2.
+
+Vous devez travailler sur :
+- les tests ;
+- les erreurs observées ;
+- le prompt système ;
+- le format des réponses ;
+- les limites ;
+- l’incertitude ;
+- la température.
+
+## Interdiction pédagogique
+
+Ne refactorez pas encore le projet.
+
+Le passage vers des routes, controllers et services sera réalisé au Jour 3.
+
+## Lancement
 
 ```bash
 npm install
-```
-
-Dupliquez `.env.example`, renommez la copie `.env`, puis renseignez votre clé API Groq.
-
-```bash
 npm run dev
 ```
 
@@ -18,20 +32,4 @@ Ouvrez ensuite :
 http://localhost:3000
 ```
 
-## Mission
-
-Conservez l’architecture actuelle. Le refactoring en routes, controllers et services sera réalisé au Jour 3.
-
-Votre travail porte principalement sur la constante `SYSTEM_PROMPT` dans `server.js`.
-
-Vous devez transformer le chatbot générique en assistant réellement adapté au cahier des charges de votre groupe.
-
-Le contrat de l’API ne change pas :
-
-```json
-{ "prompt": "..." }
-```
-
-```json
-{ "answer": "..." }
-```
+Dupliquez `.env.example` et renommez la copie `.env`.
