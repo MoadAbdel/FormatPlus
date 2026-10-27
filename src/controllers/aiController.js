@@ -1,5 +1,5 @@
-import { MAX_PROMPT_LENGTH } from "../config/index.js";
 import { generateAnswer } from "../services/aiService.js";
+const MAX_PROMPT_LENGTH = 1000;
 
 export async function testPrompt(req, res) {
   const { prompt } = req.body;
