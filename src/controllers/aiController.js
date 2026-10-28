@@ -5,6 +5,10 @@ import {
   getHistory,
   hasSession,
 } from "../services/historyService.js";
+import {
+  getPreferences,
+  handlePreference,
+} from "../services/preferenceService.js";
 const MAX_PROMPT_LENGTH = 1000;
 const SESSION_COOKIE = "sessionId";
 
@@ -48,8 +52,17 @@ export async function testPrompt(req, res) {
 
   const sessionId = resolveSession(req, res);
 
+  const commandAnswer = handlePreference(sessionId, cleanPrompt);
+  if (commandAnswer) {
+    return res.json({ answer: commandAnswer });
+  }
+
   try {
-    const answer = await generateAnswer(cleanPrompt, getHistory(sessionId));
+    const answer = await generateAnswer(
+      cleanPrompt,
+      getHistory(sessionId),
+      getPreferences(sessionId),
+    );
 
     if (!answer) {
       return res.status(502).json({
