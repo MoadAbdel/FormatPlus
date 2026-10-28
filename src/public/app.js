@@ -1,49 +1,76 @@
-const form = document.querySelector("#prompt-form");
+const form = document.querySelector("#chat-form");
 const promptInput = document.querySelector("#prompt");
-const statusElement = document.querySelector("#status");
-const answerElement = document.querySelector("#answer");
+const messagesElement = document.querySelector("#messages");
 const button = form.querySelector("button");
-const counter = document.querySelector("#counter");
 
-promptInput.addEventListener("input", () => {
-  counter.textContent = `${promptInput.value.length} / 1000`;
-});
+function addMessage(role, text) {
+  const message = document.createElement("div");
+  message.className = `message ${role}`;
 
-form.addEventListener("submit", async (event) => {
-  event.preventDefault();
+  const bubble = document.createElement("p");
+  bubble.className = "bubble";
+  bubble.textContent = text;
 
-  const prompt = promptInput.value.trim();
+  message.append(bubble);
+  messagesElement.append(message);
+  messagesElement.scrollTop = messagesElement.scrollHeight;
+  return message;
+}
 
-  if (!prompt) {
-    statusElement.textContent = "Veuillez saisir un scénario.";
-    return;
-  }
+function resizeInput() {
+  promptInput.style.height = "auto";
+  promptInput.style.height = `${Math.min(promptInput.scrollHeight + 2, 160)}px`;
+}
+
+async function sendMessage(prompt) {
+  addMessage("user", prompt);
 
   button.disabled = true;
-  statusElement.textContent = "Test en cours…";
-  answerElement.textContent = "";
-  answerElement.classList.remove("error");
+  const typing = addMessage("assistant", "…");
 
   try {
     const response = await fetch("/api/ai/test", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt })
+      body: JSON.stringify({ prompt }),
     });
 
-    const data = await response.json();
+    const data = await response.json().catch(() => ({}));
 
     if (!response.ok) {
       throw new Error(data.error || "Une erreur est survenue.");
     }
 
-    statusElement.textContent = "Réponse obtenue :";
-    answerElement.textContent = data.answer;
+    typing.remove();
+    addMessage("assistant", data.answer);
   } catch (error) {
-    statusElement.textContent = "Échec du test.";
-    answerElement.textContent = error.message;
-    answerElement.classList.add("error");
+    typing.remove();
+    addMessage("error", error.message);
   } finally {
     button.disabled = false;
+    promptInput.focus();
+  }
+}
+
+form.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  const prompt = promptInput.value.trim();
+
+  if (!prompt || button.disabled) {
+    return;
+  }
+
+  promptInput.value = "";
+  resizeInput();
+  sendMessage(prompt);
+});
+
+promptInput.addEventListener("input", resizeInput);
+
+promptInput.addEventListener("keydown", (event) => {
+  if (event.key === "Enter" && !event.shiftKey) {
+    event.preventDefault();
+    form.requestSubmit();
   }
 });

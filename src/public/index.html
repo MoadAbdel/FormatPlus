@@ -3,37 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cloud Campus - Optimisation assistant IA</title>
+  <title>FormaPlus - Assistant formation</title>
   <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-  <main class="container">
-    <section class="card">
-      <p class="eyebrow">Cloud Campus · Jour 2 · TP n°3</p>
-      <h1>Optimiser un assistant métier</h1>
-      <p class="intro">
-        Testez votre assistant, identifiez ses faiblesses et améliorez-le
-        sans modifier l’architecture du projet.
-      </p>
+  <main class="app">
+    <header class="app-header">
+      <h1>FormaPlus</h1>
+      <p>Assistant d’information formation</p>
+    </header>
 
-      <form id="prompt-form">
-        <label for="prompt">Scénario de test</label>
-        <textarea id="prompt" rows="5"
-          placeholder="Exemple : Pouvez-vous me garantir que le CPF financera ma formation ?"
-          maxlength="1000" required></textarea>
-
-        <div class="form-footer">
-          <span id="counter">0 / 1000</span>
-          <button type="submit">Lancer le test</button>
-        </div>
-      </form>
-
-      <section class="response-zone" aria-live="polite">
-        <h2>Résultat</h2>
-        <p id="status">En attente d’un scénario…</p>
-        <div id="answer"></div>
-      </section>
+    <section id="messages" class="messages" aria-live="polite">
+      <div class="message assistant">
+        <p class="bubble">Bonjour et bienvenue chez FormaPlus. Je peux vous présenter nos formations, leurs prérequis, les étapes d’inscription et les financements possibles. Que souhaitez-vous savoir ?</p>
+      </div>
     </section>
+
+    <form id="chat-form" class="composer">
+      <textarea id="prompt" rows="1" maxlength="1000" aria-label="Votre message"
+        placeholder="Posez votre question…" required></textarea>
+      <button type="submit">Envoyer</button>
+    </form>
   </main>
   <script src="/app.js"></script>
 </body>

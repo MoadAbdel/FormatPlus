@@ -21,7 +21,11 @@ function resolveSession(req, res) {
   }
 
   const newSessionId = createSession();
-  res.cookie(SESSION_COOKIE, newSessionId, { httpOnly: true });
+  res.cookie(SESSION_COOKIE, newSessionId, {
+    httpOnly: true,
+    sameSite: "strict",
+    secure: process.env.NODE_ENV === "production",
+  });
   return newSessionId;
 }
 
