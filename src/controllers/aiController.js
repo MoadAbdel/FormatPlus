@@ -1,5 +1,29 @@
 import { generateAnswer } from "../services/aiService.js";
+import {
+  addExchange,
+  createSession,
+  getHistory,
+  hasSession,
+} from "../services/historyService.js";
 const MAX_PROMPT_LENGTH = 1000;
+const SESSION_COOKIE = "sessionId";
+
+function readSessionId(req) {
+  const match = req.headers.cookie?.match(/(?:^|;\s*)sessionId=([^;]+)/);
+  return match?.[1];
+}
+
+function resolveSession(req, res) {
+  const sessionId = readSessionId(req);
+
+  if (sessionId && hasSession(sessionId)) {
+    return sessionId;
+  }
+
+  const newSessionId = createSession();
+  res.cookie(SESSION_COOKIE, newSessionId, { httpOnly: true });
+  return newSessionId;
+}
 
 export async function testPrompt(req, res) {
   const { prompt } = req.body;
@@ -18,14 +42,18 @@ export async function testPrompt(req, res) {
     });
   }
 
+  const sessionId = resolveSession(req, res);
+
   try {
-    const answer = await generateAnswer(cleanPrompt);
+    const answer = await generateAnswer(cleanPrompt, getHistory(sessionId));
 
     if (!answer) {
       return res.status(502).json({
         error: "Le fournisseur d’IA n’a retourné aucune réponse.",
       });
     }
+
+    addExchange(sessionId, cleanPrompt, answer);
 
     return res.json({ answer });
   } catch (error) {

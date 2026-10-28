@@ -10,11 +10,12 @@ const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY,
 });
 
-export async function generateAnswer(prompt) {
+export async function generateAnswer(prompt, history = []) {
   const completion = await groq.chat.completions.create({
     model: GROQ_MODEL,
     messages: [
       { role: "system", content: SYSTEM_PROMPT },
+      ...history,
       { role: "user", content: prompt },
     ],
     temperature: TEMPERATURE,
