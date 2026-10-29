@@ -1,88 +1,116 @@
 import fs from "node:fs";
 
 const FILE = "preferences.json";
-const TTL_MS = 30 * 60 * 1000;
-const MAX_LENGTH = 80;
-
-const TRIGGER =
-  /^(enregistre|retiens|j['’]aimerais|je voudrais|je veux|r[ée]pond|utilise)\s*:?\s*(.+)$/i;
-const DELETE =
-  /^(supprime|efface|oublie|annule)\s+(mes préférences|la consigne\s+(\w+))/i;
-const TYPES = {
-  longueur: /court|br[èe]ve?|concis|détaillé|longues|complet/i,
-  ton: /tutoie|vouvoie|formel|familier/i,
-  format: /liste|puce/i,
-  vocabulaire: /simple|jargon/i,
-};
+const SESSION_DURATION = 30 * 60 * 1000;
+const MAX_PREFERENCES = 15;
+const MAX_LENGTH = 150;
 
 function readFile() {
-  if (!fs.existsSync(FILE)) return {};
-  return JSON.parse(fs.readFileSync(FILE, "utf8"));
+  try {
+    return JSON.parse(fs.readFileSync(FILE, "utf8"));
+  } catch {
+    return {};
+  }
 }
 
 function writeFile(data) {
   for (const sessionId in data) {
-    if (Date.now() - data[sessionId].lastSeen > TTL_MS) delete data[sessionId];
+    const age = Date.now() - data[sessionId].lastSeen;
+    if (age > SESSION_DURATION) {
+      delete data[sessionId];
+    }
   }
   fs.writeFileSync(FILE, JSON.stringify(data, null, 2));
 }
 
-function saveRules(data, sessionId, rules) {
-  data[sessionId] = { rules, lastSeen: Date.now() };
-  writeFile(data);
+function cleanText(text) {
+  return text.replace(/["`\n\r]/g, " ").replace(/\s+/g, " ").trim();
 }
 
-function cleanSentence(text) {
-  return text.replace(/["`\n\r]/g, " ").trim();
+function normalize(text) {
+  return cleanText(text).toLowerCase().replace(/’/g, "'");
 }
 
-function findType(sentence) {
-  return Object.keys(TYPES).find((type) => TYPES[type].test(sentence));
-}
+function findPreferences(data, sessionId) {
+  const entry = data[sessionId];
 
-function deleteRules(data, sessionId, rules, type) {
-  if (type) {
-    const remainingRules = rules.filter((rule) => rule.type !== type);
-    saveRules(data, sessionId, remainingRules);
-    return `La consigne « ${type} » est supprimée.`;
-  } else {
-    saveRules(data, sessionId, []);
-    return "Vos préférences sont supprimées.";
+  if (!entry || !Array.isArray(entry.preferences)) {
+    return [];
   }
-}
 
-function addRule(data, sessionId, rules, type, sentence) {
-  const otherRules = rules.filter((rule) => rule.type !== type);
-  const newRules = [...otherRules, { type, value: sentence }];
-  saveRules(data, sessionId, newRules);
-  return `C'est noté : « ${sentence} ».`;
+  const age = Date.now() - entry.lastSeen;
+  if (age > SESSION_DURATION) {
+    return [];
+  }
+
+  return entry.preferences;
 }
 
 export function getPreferences(sessionId) {
-  const rules = readFile()[sessionId]?.rules ?? [];
-  return rules.map((rule) => rule.value);
+  const data = readFile();
+  const preferences = findPreferences(data, sessionId);
+
+  if (preferences.length > 0) {
+    data[sessionId].lastSeen = Date.now();
+    writeFile(data);
+  }
+
+  return preferences;
 }
 
-export function handlePreference(sessionId, message) {
+export function getSavedEntry(sessionId) {
+  return readFile()[sessionId] ?? null;
+}
+
+export function savePreferences(sessionId, addList, removeList) {
   const data = readFile();
-  const rules = data[sessionId]?.rules ?? [];
+  const oldPreferences = findPreferences(data, sessionId);
 
-  const deleteMatch = message.match(DELETE);
-  if (deleteMatch) {
-    const type = deleteMatch[3]?.toLowerCase();
-    return deleteRules(data, sessionId, rules, type);
+  const textsToRemove = [];
+  for (const item of removeList) {
+    if (typeof item === "string") {
+      textsToRemove.push(normalize(item));
+    }
   }
 
-  const triggerMatch = message.match(TRIGGER);
-  if (!triggerMatch) return null;
-
-  const sentence = cleanSentence(message);
-  const type = findType(sentence);
-  if (!type) return null;
-
-  if (sentence.length > MAX_LENGTH) {
-    return `Votre consigne est trop longue (${MAX_LENGTH} caractères maximum).`;
+  const preferences = [];
+  const removed = [];
+  for (const text of oldPreferences) {
+    if (textsToRemove.includes(normalize(text))) {
+      removed.push(text);
+    } else {
+      preferences.push(text);
+    }
   }
 
-  return addRule(data, sessionId, rules, type, sentence);
+  const added = [];
+  const ignored = [];
+  for (const item of addList) {
+    if (typeof item !== "string") {
+      continue;
+    }
+
+    const text = cleanText(item);
+    const isKnown = preferences.some((preference) => {
+      return normalize(preference) === normalize(text);
+    });
+    if (text === "" || isKnown) {
+      continue;
+    }
+
+    if (text.length > MAX_LENGTH || preferences.length >= MAX_PREFERENCES) {
+      ignored.push(text);
+      continue;
+    }
+
+    preferences.push(text);
+    added.push(text);
+  }
+
+  if (added.length > 0 || removed.length > 0) {
+    data[sessionId] = { preferences, lastSeen: Date.now() };
+    writeFile(data);
+  }
+
+  return { added, removed, ignored };
 }

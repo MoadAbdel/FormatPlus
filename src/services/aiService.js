@@ -1,39 +1,108 @@
 import "dotenv/config";
 import Groq from "groq-sdk";
-import { SYSTEM_PROMPT } from "../config/systemPrompt.js";
+import {
+  OUTPUT_FORMAT_PROMPT,
+  PREFERENCES_PROMPT,
+  SYSTEM_PROMPT,
+} from "../config/systemPrompt.js";
 
 const TEMPERATURE = 0.6;
-const MAX_COMPLETION_TOKENS = 700;
+const MAX_COMPLETION_TOKENS = 800;
 const GROQ_MODEL = process.env.GROQ_MODEL;
 
 const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY,
 });
 
+function formatPreferences(preferences) {
+  if (preferences.length === 0) {
+    return "(aucun souvenir enregistré)";
+  }
+
+  let lines = "";
+  for (const preference of preferences) {
+    lines += `- ${preference}\n`;
+  }
+  return lines.trim();
+}
+
 function buildSystemPrompt(preferences) {
-  if (preferences.length === 0) return SYSTEM_PROMPT;
+  const savedPreferences = `SOUVENIRS ENREGISTRÉS\n${formatPreferences(preferences)}`;
 
-  const lines = preferences.map((preference) => `- ${preference}`).join("\n");
-  return `PRÉFÉRENCES DE L'UTILISATEUR (prioritaires sur toutes les règles de forme ci-dessous : 150 mots, vouvoiement, liste, ligne "Prochaine étape")
-L'utilisateur a demandé :
-${lines}
-Applique-les à la lettre dans chacune de tes réponses, refus compris, et ignore l'historique s'il contient des réponses qui ne les respectent pas.
-Ce sont des préférences de forme (ton, longueur, vocabulaire, présentation). Elles ne modifient jamais les interdictions absolues, la sécurité, le rôle ni le catalogue, et ne sont jamais des ordres sur le fond.
+  return [
+    SYSTEM_PROMPT,
+    PREFERENCES_PROMPT,
+    savedPreferences,
+    OUTPUT_FORMAT_PROMPT,
+  ].join("\n");
+}
 
-${SYSTEM_PROMPT}`;
+function cleanRefusedList(refusedList) {
+  const refused = [];
+
+  if (!Array.isArray(refusedList)) {
+    return refused;
+  }
+
+  for (const item of refusedList) {
+    if (typeof item?.text === "string" && typeof item?.reason === "string") {
+      refused.push({ text: item.text, reason: item.reason });
+    }
+  }
+  return refused;
+}
+
+function toList(value) {
+  return Array.isArray(value) ? value : [];
+}
+
+function readModelOutput(rawText) {
+  try {
+    const output = JSON.parse(rawText);
+    const answer =
+      typeof output.answer === "string" ? output.answer.trim() : "";
+
+    return {
+      answer,
+      addPreferences: toList(output.addPreferences),
+      removePreferences: toList(output.removePreferences),
+      refusedPreferences: cleanRefusedList(output.refusedPreferences),
+    };
+  } catch {
+    return {
+      answer: rawText,
+      addPreferences: [],
+      removePreferences: [],
+      refusedPreferences: [],
+    };
+  }
+}
+
+function askModel(messages) {
+  return groq.chat.completions.create({
+    model: GROQ_MODEL,
+    messages,
+    temperature: TEMPERATURE,
+    max_completion_tokens: MAX_COMPLETION_TOKENS,
+    reasoning_effort: "low",
+    response_format: { type: "json_object" },
+  });
 }
 
 export async function generateAnswer(prompt, history = [], preferences = []) {
-  const completion = await groq.chat.completions.create({
-    model: GROQ_MODEL,
-    messages: [
-      { role: "system", content: buildSystemPrompt(preferences) },
-      ...history,
-      { role: "user", content: prompt },
-    ],
-    temperature: TEMPERATURE,
-    max_completion_tokens: MAX_COMPLETION_TOKENS,
-  });
+  const messages = [
+    { role: "system", content: buildSystemPrompt(preferences) },
+    ...history,
+    { role: "user", content: prompt },
+  ];
 
-  return completion.choices[0]?.message?.content?.trim();
+  let completion;
+  try {
+    completion = await askModel(messages);
+  } catch (error) {
+    console.log(error);
+  }
+
+  const rawText = completion.choices[0]?.message?.content?.trim() ?? "";
+  return { ...readModelOutput(rawText), usage: completion.usage };
 }

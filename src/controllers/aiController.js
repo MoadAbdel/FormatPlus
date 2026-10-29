@@ -7,10 +7,15 @@ import {
 } from "../services/historyService.js";
 import {
   getPreferences,
-  handlePreference,
+  getSavedEntry,
+  savePreferences,
 } from "../services/preferenceService.js";
 const MAX_PROMPT_LENGTH = 1000;
 const SESSION_COOKIE = "sessionId";
+const ERROR_MESSAGES = {
+  401: "Clé API Groq absente ou invalide.",
+  429: "L'assistant reçoit trop de demandes. Réessayez dans quelques secondes.",
+};
 
 function readSessionId(req) {
   const match = req.headers.cookie?.match(/(?:^|;\s*)sessionId=([^;]+)/);
@@ -52,17 +57,17 @@ export async function testPrompt(req, res) {
 
   const sessionId = resolveSession(req, res);
 
-  const commandAnswer = handlePreference(sessionId, cleanPrompt);
-  if (commandAnswer) {
-    return res.json({ answer: commandAnswer });
-  }
-
   try {
-    const answer = await generateAnswer(
-      cleanPrompt,
-      getHistory(sessionId),
-      getPreferences(sessionId),
-    );
+    const history = getHistory(sessionId);
+    const preferences = getPreferences(sessionId);
+
+    const {
+      answer,
+      addPreferences,
+      removePreferences,
+      refusedPreferences,
+      usage,
+    } = await generateAnswer(cleanPrompt, history, preferences);
 
     if (!answer) {
       return res.status(502).json({
@@ -72,15 +77,32 @@ export async function testPrompt(req, res) {
 
     addExchange(sessionId, cleanPrompt, answer);
 
-    return res.json({ answer });
+    const changes = savePreferences(
+      sessionId,
+      addPreferences,
+      removePreferences,
+    );
+
+    const response = { answer, changes, refusedPreferences };
+
+    if (process.env.NODE_ENV !== "production") {
+      response.debug = {
+        memorySent: preferences,
+        historyCount: history.length,
+        savedEntry: getSavedEntry(sessionId),
+        usage,
+      };
+    }
+
+    return res.json(response);
   } catch (error) {
     console.error("Erreur Groq :", error);
 
-    const status = error?.status === 401 ? 401 : 500;
+    const knownStatus = error?.status === 401 || error?.status === 429;
+    const status = knownStatus ? error.status : 500;
     const message =
-      status === 401
-        ? "Clé API Groq absente ou invalide."
-        : "Impossible de générer une réponse pour le moment.";
+      ERROR_MESSAGES[status] ??
+      "Impossible de générer une réponse pour le moment.";
 
     return res.status(status).json({ error: message });
   }

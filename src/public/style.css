@@ -43,6 +43,22 @@ body {
 }
 .user .bubble { background: #1267c4; color: white; }
 .error .bubble { background: #fdecef; color: #a00022; }
+.notice .bubble { background: #e8f6ee; color: #0c6b3a; font-size: .9rem; }
+
+.debug {
+  margin-bottom: 12px;
+  font-size: .8rem;
+  color: #66778d;
+}
+.debug summary { cursor: pointer; }
+.debug pre {
+  margin: 6px 0 0;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #f6f8fb;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
 
 .composer {
   display: flex;
