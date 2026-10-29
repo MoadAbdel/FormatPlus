@@ -1,30 +1,105 @@
 <!doctype html>
 <html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FormaPlus - Assistant formation</title>
-  <link rel="stylesheet" href="/style.css">
-</head>
-<body>
-  <main class="app">
-    <header class="app-header">
-      <h1>FormaPlus</h1>
-      <p>Assistant d’information formation</p>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FormaPlus - Nos formations</title>
+    <meta
+      name="description"
+      content="Formations professionnelles certifiantes. Posez vos questions à l'assistant FormaPlus."
+    />
+    <link rel="stylesheet" href="/css/base.css" />
+    <link rel="stylesheet" href="/css/formations.css" />
+    <link rel="stylesheet" href="/css/chat.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="/" aria-label="FormaPlus, accueil">
+          <img src="/img/logo.svg" alt="" width="36" height="36" />
+          <span>FormaPlus</span>
+        </a>
+        <p class="tagline">Organisme de formation professionnelle</p>
+      </div>
     </header>
 
-    <section id="messages" class="messages" aria-live="polite">
-      <div class="message assistant">
-        <p class="bubble">Bonjour et bienvenue chez FormaPlus. Je peux vous présenter nos formations, leurs prérequis, les étapes d’inscription et les financements possibles. Que souhaitez-vous savoir ?</p>
-      </div>
-    </section>
+    <main class="container">
+      <section class="intro">
+        <h1>Nos formations professionnelles</h1>
+        <p>
+          <span id="formations-count">Nos</span> formations certifiantes, en centre ou à distance. Une question
+          sur les prérequis, l'inscription ou le financement ? L'assistant est
+          là pour vous répondre.
+        </p>
+      </section>
 
-    <form id="chat-form" class="composer">
-      <textarea id="prompt" rows="1" maxlength="1000" aria-label="Votre message"
-        placeholder="Posez votre question…" required></textarea>
-      <button type="submit">Envoyer</button>
-    </form>
-  </main>
-  <script src="/app.js"></script>
-</body>
+      <section
+        id="formations"
+        class="formations"
+        aria-label="Formations disponibles"
+        aria-live="polite"
+      >
+        <p class="formations-status">Chargement des formations…</p>
+      </section>
+
+      <p class="note">
+        Les prix, les dates de session et le financement se voient avec un
+        conseiller FormaPlus.
+      </p>
+    </main>
+
+    <button
+      id="chat-toggle"
+      class="chat-toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="chat-panel"
+    >
+      Une question ?
+    </button>
+
+    <aside
+      id="chat-panel"
+      class="chat-panel"
+      aria-label="Assistant formation"
+      hidden
+    >
+      <header class="chat-header">
+        <img class="chat-logo" src="/img/logo.svg" alt="" width="40" height="40" />
+        <div class="chat-title">
+          <strong>Assistant FormaPlus</strong>
+          <p>Informations sur les formations</p>
+        </div>
+        <button
+          id="chat-close"
+          class="chat-close"
+          type="button"
+          aria-label="Fermer la discussion"
+        >
+          ×
+        </button>
+      </header>
+
+      <section id="messages" class="messages" aria-live="polite"></section>
+
+      <form id="chat-form" class="composer">
+        <textarea
+          id="prompt"
+          rows="1"
+          maxlength="1000"
+          aria-label="Votre message"
+          placeholder="Posez votre question…"
+          required
+        ></textarea>
+        <button type="submit" class="btn">Envoyer</button>
+      </form>
+
+      <p class="chat-disclaimer">
+        L'IA peut faire des erreurs. Vérifiez les informations importantes
+        auprès d'un conseiller.
+      </p>
+    </aside>
+
+    <script type="module" src="/js/main.js"></script>
+  </body>
 </html>

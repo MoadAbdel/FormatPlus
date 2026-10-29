@@ -1,0 +1,150 @@
+[
+  {
+    "id": "developpeur-web",
+    "titre": "Développeur web et web mobile",
+    "dureeMois": 7,
+    "modalites": [
+      "centre",
+      "distance"
+    ],
+    "prerequis": "niveau bac ou équivalent, logique et aisance avec l'ordinateur",
+    "certification": {
+      "type": "Titre professionnel",
+      "niveau": 5,
+      "equivalent": "bac+2"
+    },
+    "debouches": [
+      "développeur web",
+      "intégrateur"
+    ]
+  },
+  {
+    "id": "technicien-assistance-informatique",
+    "titre": "Technicien d'assistance informatique",
+    "dureeMois": 6,
+    "modalites": [
+      "centre"
+    ],
+    "prerequis": "niveau 3e ou CAP, intérêt pour le matériel informatique",
+    "certification": {
+      "type": "Titre professionnel",
+      "niveau": 4,
+      "equivalent": "bac"
+    },
+    "debouches": [
+      "technicien support",
+      "technicien helpdesk"
+    ]
+  },
+  {
+    "id": "gestionnaire-paie",
+    "titre": "Gestionnaire de paie",
+    "dureeMois": 5,
+    "modalites": [
+      "distance"
+    ],
+    "prerequis": "niveau bac, à l'aise avec les chiffres et les outils bureautiques",
+    "certification": {
+      "type": "Titre professionnel",
+      "niveau": 5,
+      "equivalent": "bac+2"
+    },
+    "debouches": [
+      "gestionnaire de paie",
+      "assistant paie"
+    ]
+  },
+  {
+    "id": "assistant-rh",
+    "titre": "Assistant ressources humaines",
+    "dureeMois": 6,
+    "modalites": [
+      "centre",
+      "distance"
+    ],
+    "prerequis": "niveau bac, bonne expression écrite",
+    "certification": {
+      "type": "Titre professionnel",
+      "niveau": 5,
+      "equivalent": "bac+2"
+    },
+    "debouches": [
+      "assistant RH",
+      "chargé de recrutement junior"
+    ]
+  },
+  {
+    "id": "comptable-assistant",
+    "titre": "Comptable assistant",
+    "dureeMois": 7,
+    "modalites": [
+      "centre",
+      "distance"
+    ],
+    "prerequis": "niveau 3e ou CAP, aisance avec les chiffres et les outils bureautiques",
+    "certification": {
+      "type": "Titre professionnel",
+      "niveau": 4,
+      "equivalent": "bac"
+    },
+    "debouches": [
+      "comptable assistant",
+      "assistant comptable"
+    ]
+  },
+  {
+    "id": "conseiller-commercial",
+    "titre": "Conseiller commercial",
+    "dureeMois": 6,
+    "modalites": [
+      "centre"
+    ],
+    "prerequis": "niveau bac, goût du contact client et bonne expression orale",
+    "certification": {
+      "type": "Titre professionnel",
+      "niveau": 4,
+      "equivalent": "bac"
+    },
+    "debouches": [
+      "conseiller de vente",
+      "conseiller clientèle"
+    ]
+  },
+  {
+    "id": "concepteur-developpeur-applications",
+    "titre": "Concepteur développeur d'applications",
+    "dureeMois": 10,
+    "modalites": [
+      "centre",
+      "distance"
+    ],
+    "prerequis": "niveau bac+2 ou premières bases en programmation, esprit d'analyse",
+    "certification": {
+      "type": "Titre professionnel",
+      "niveau": 6,
+      "equivalent": "bac+3"
+    },
+    "debouches": [
+      "concepteur développeur",
+      "développeur d'applications"
+    ]
+  },
+  {
+    "id": "technicien-maintenance-industrielle",
+    "titre": "Technicien de maintenance industrielle",
+    "dureeMois": 8,
+    "modalites": [
+      "centre"
+    ],
+    "prerequis": "niveau 3e ou CAP, intérêt pour la mécanique et l'électricité",
+    "certification": {
+      "type": "Titre professionnel",
+      "niveau": 4,
+      "equivalent": "bac"
+    },
+    "debouches": [
+      "technicien de maintenance",
+      "agent de maintenance"
+    ]
+  }
+]

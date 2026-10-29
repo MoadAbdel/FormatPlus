@@ -1,9 +1,10 @@
-const form = document.querySelector("#chat-form");
-const promptInput = document.querySelector("#prompt");
 const messagesElement = document.querySelector("#messages");
-const button = form.querySelector("button");
 
-function addMessage(role, text) {
+function scrollToBottom() {
+  messagesElement.scrollTop = messagesElement.scrollHeight;
+}
+
+export function addMessage(role, text) {
   const message = document.createElement("div");
   message.className = `message ${role}`;
 
@@ -13,16 +14,11 @@ function addMessage(role, text) {
 
   message.append(bubble);
   messagesElement.append(message);
-  messagesElement.scrollTop = messagesElement.scrollHeight;
+  scrollToBottom();
   return message;
 }
 
-function resizeInput() {
-  promptInput.style.height = "auto";
-  promptInput.style.height = `${Math.min(promptInput.scrollHeight + 2, 160)}px`;
-}
-
-function addPreferenceMessages(data) {
+export function addPreferenceMessages(data) {
   const { added, removed, ignored } = data.changes;
 
   for (const text of added) {
@@ -69,7 +65,7 @@ function formatDebug(debug) {
   return lines.join("\n");
 }
 
-function addDebug(debug) {
+export function addDebug(debug) {
   const details = document.createElement("details");
   details.className = "debug";
 
@@ -81,63 +77,5 @@ function addDebug(debug) {
 
   details.append(summary, content);
   messagesElement.append(details);
-  messagesElement.scrollTop = messagesElement.scrollHeight;
+  scrollToBottom();
 }
-
-async function sendMessage(prompt) {
-  addMessage("user", prompt);
-
-  button.disabled = true;
-  const typing = addMessage("assistant", "…");
-
-  try {
-    const response = await fetch("/api/ai/test", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt }),
-    });
-
-    const data = await response.json().catch(() => ({}));
-
-    if (!response.ok) {
-      throw new Error(data.error || "Une erreur est survenue.");
-    }
-
-    typing.remove();
-    addMessage("assistant", data.answer);
-    addPreferenceMessages(data);
-
-    if (data.debug) {
-      addDebug(data.debug);
-    }
-  } catch (error) {
-    typing.remove();
-    addMessage("error", error.message);
-  } finally {
-    button.disabled = false;
-    promptInput.focus();
-  }
-}
-
-form.addEventListener("submit", (event) => {
-  event.preventDefault();
-
-  const prompt = promptInput.value.trim();
-
-  if (!prompt || button.disabled) {
-    return;
-  }
-
-  promptInput.value = "";
-  resizeInput();
-  sendMessage(prompt);
-});
-
-promptInput.addEventListener("input", resizeInput);
-
-promptInput.addEventListener("keydown", (event) => {
-  if (event.key === "Enter" && !event.shiftKey) {
-    event.preventDefault();
-    form.requestSubmit();
-  }
-});

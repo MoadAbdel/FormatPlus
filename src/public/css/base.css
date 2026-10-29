@@ -1,0 +1,99 @@
+:root {
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --text: #1f2937;
+  --muted: #5b6575;
+  --border: #e2e5ea;
+  --accent: #1d4ed8;
+  --accent-dark: #1e40af;
+  --accent-soft: #e8eefc;
+  --danger: #b91c1c;
+  --radius: 12px;
+  --shadow: 0 10px 30px rgba(15, 23, 42, .16);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  line-height: 1.5;
+  color: var(--text);
+  background: var(--bg);
+}
+
+html { scrollbar-color: #9aa3b2 var(--bg); }
+
+::selection { background: var(--accent-soft); color: var(--text); }
+::placeholder { color: var(--muted); opacity: 1; }
+textarea { caret-color: var(--accent); }
+
+h1, h2, h3, p, dl, dd, ul { margin: 0; padding: 0; }
+ul { list-style: none; }
+
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.container {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.site-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 68px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text);
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+.brand img { display: block; border-radius: 9px; }
+
+.tagline { color: var(--muted); font-size: .95rem; }
+
+@media (max-width: 560px) {
+  .tagline { display: none; }
+}
+
+.intro { padding: 48px 0 32px; }
+.intro h1 { font-size: clamp(1.6rem, 4vw, 2.25rem); line-height: 1.2; text-wrap: balance; }
+.intro p { margin-top: 12px; color: var(--muted); font-size: .95rem; }
+.intro .btn { margin-top: 24px; }
+
+.note {
+  margin: 8px 0 96px;
+  color: var(--muted);
+  font-size: .9rem;
+}
+
+.btn {
+  min-height: 44px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color .15s ease-out;
+}
+.btn:hover { background: var(--accent-dark); }
+.btn:disabled { opacity: .6; cursor: default; background: var(--accent); }
