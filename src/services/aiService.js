@@ -5,6 +5,7 @@ import {
   PREFERENCES_PROMPT,
   SYSTEM_PROMPT,
 } from "../config/systemPrompt.js";
+import { buildKnowledgeContext, searchKnowledge } from "./ragService.js";
 
 const TEMPERATURE = 0.6;
 const MAX_COMPLETION_TOKENS = 800;
@@ -26,13 +27,17 @@ function formatPreferences(preferences) {
   return lines.trim();
 }
 
-function buildSystemPrompt(preferences) {
+function buildSystemPrompt(preferences, passages) {
   const savedPreferences = `SOUVENIRS ENREGISTRÉS\n${formatPreferences(preferences)}`;
+  const knowledge =
+    "EXTRAITS DOCUMENTAIRES (appuie-toi dessus en priorité ; s'ils ne répondent pas à la question, dis-le)\n" +
+    buildKnowledgeContext(passages);
 
   return [
     SYSTEM_PROMPT,
     PREFERENCES_PROMPT,
     savedPreferences,
+    knowledge,
     OUTPUT_FORMAT_PROMPT,
   ].join("\n");
 }
@@ -90,8 +95,9 @@ function askModel(messages) {
 }
 
 export async function generateAnswer(prompt, history = [], preferences = []) {
+  const passages = searchKnowledge(prompt);
   const messages = [
-    { role: "system", content: buildSystemPrompt(preferences) },
+    { role: "system", content: buildSystemPrompt(preferences, passages) },
     ...history,
     { role: "user", content: prompt },
   ];
@@ -104,5 +110,6 @@ export async function generateAnswer(prompt, history = [], preferences = []) {
   }
 
   const rawText = completion.choices[0]?.message?.content?.trim() ?? "";
-  return { ...readModelOutput(rawText), usage: completion.usage };
+  const sources = passages.map(({ titre, score }) => ({ titre, score }));
+  return { ...readModelOutput(rawText), usage: completion.usage, sources };
 }

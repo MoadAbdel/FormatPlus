@@ -1,0 +1,176 @@
+[
+  {
+    "id": "etapes-inscription",
+    "titre": "Les étapes de l'inscription",
+    "motsCles": [
+      "étapes",
+      "inscrire",
+      "inscription",
+      "candidater",
+      "candidature",
+      "postuler",
+      "démarches",
+      "procédure",
+      "commencer"
+    ],
+    "resume": "Candidature en ligne, étude du dossier, test éventuel, entretien, puis décision.",
+    "texte": "Pour s'inscrire, il faut suivre cinq étapes : 1. le candidat dépose sa candidature en ligne ; 2. FormaPlus étudie le dossier ; 3. certaines formations demandent un test de positionnement ; 4. le candidat passe un entretien avec un conseiller ; 5. FormaPlus envoie sa décision. Le financement est étudié en parallèle avec le conseiller."
+  },
+  {
+    "id": "documents-inscription",
+    "titre": "Documents à fournir pour l'inscription",
+    "motsCles": [
+      "papiers",
+      "documents",
+      "pièces",
+      "justificatifs",
+      "dossier",
+      "inscrire",
+      "inscription",
+      "candidature",
+      "cv",
+      "lettre",
+      "motivation"
+    ],
+    "resume": "CV, lettre de motivation, pièce d'identité et diplômes.",
+    "texte": "Pour s'inscrire, le candidat envoie un CV à jour, une lettre de motivation, une copie de sa pièce d'identité et de son dernier diplôme. Un conseiller vérifie le dossier avant l'entretien."
+  },
+  {
+    "id": "entretien-admission",
+    "titre": "L'entretien d'admission",
+    "motsCles": [
+      "entretien",
+      "admission",
+      "rendez-vous",
+      "sélection",
+      "test",
+      "positionnement",
+      "accepté",
+      "réponse",
+      "décision"
+    ],
+    "resume": "Un entretien de 30 minutes avec un conseiller, parfois précédé d'un test.",
+    "texte": "Après réception du dossier, le candidat passe un entretien de 30 minutes avec un conseiller pédagogique. Certaines formations ajoutent un test de positionnement. La décision d'admission est envoyée par e-mail."
+  },
+  {
+    "id": "financement-cpf",
+    "titre": "Financer sa formation avec le CPF",
+    "motsCles": [
+      "cpf",
+      "financement",
+      "financer",
+      "payer",
+      "prix",
+      "coût",
+      "argent",
+      "compte",
+      "droits"
+    ],
+    "resume": "Le CPF peut financer tout ou partie de la formation, selon les droits du candidat.",
+    "texte": "Le Compte Personnel de Formation (CPF) peut financer tout ou partie d'une formation certifiante. Le candidat consulte ses droits sur moncompteformation.gouv.fr. Le reste à charge éventuel est étudié avec un conseiller."
+  },
+  {
+    "id": "financement-france-travail",
+    "titre": "Financement pour les demandeurs d'emploi",
+    "motsCles": [
+      "france",
+      "travail",
+      "chômage",
+      "chômeur",
+      "demandeur",
+      "emploi",
+      "allocation",
+      "aif",
+      "inscrit"
+    ],
+    "resume": "France Travail peut compléter ou financer la formation d'un demandeur d'emploi, après accord.",
+    "texte": "Un demandeur d'emploi peut mobiliser son CPF et demander un complément à France Travail, par exemple l'Aide Individuelle à la Formation (AIF). Selon sa situation, ses allocations peuvent être maintenues pendant la formation. Le projet doit être validé avec son conseiller France Travail avant l'entrée en formation."
+  },
+  {
+    "id": "financement-employeur",
+    "titre": "Financement par l'employeur",
+    "motsCles": [
+      "employeur",
+      "entreprise",
+      "salarié",
+      "patron",
+      "opco",
+      "plan",
+      "transition",
+      "ptp",
+      "reconversion"
+    ],
+    "resume": "Un salarié peut être financé par son employeur, son OPCO ou un projet de transition professionnelle.",
+    "texte": "Un salarié peut demander à son employeur d'inscrire la formation dans le plan de développement des compétences, souvent financé avec l'aide d'un OPCO. Pour une reconversion, le Projet de Transition Professionnelle (PTP), géré par Transitions Pro, peut prendre en charge la formation et maintenir le salaire, après accord du dossier."
+  },
+  {
+    "id": "formation-distance",
+    "titre": "Suivre une formation à distance",
+    "motsCles": [
+      "distance",
+      "ligne",
+      "internet",
+      "visio",
+      "maison",
+      "domicile",
+      "télétravail",
+      "plateforme",
+      "ordinateur"
+    ],
+    "resume": "Cours en ligne et classes virtuelles avec un formateur, depuis chez soi.",
+    "texte": "À distance, le stagiaire suit des cours sur une plateforme en ligne et participe à des classes virtuelles en visio avec un formateur. Un suivi individuel est prévu chaque semaine. Il faut un ordinateur, une webcam et une connexion internet stable."
+  },
+  {
+    "id": "stage-entreprise",
+    "titre": "La période en entreprise",
+    "motsCles": [
+      "stage",
+      "entreprise",
+      "alternance",
+      "pratique",
+      "terrain",
+      "tuteur",
+      "convention"
+    ],
+    "resume": "La plupart des formations incluent un stage de quelques semaines en entreprise.",
+    "texte": "La plupart des formations FormaPlus incluent une période de stage en entreprise de quelques semaines, selon la formation. Le stagiaire cherche son entreprise d'accueil avec l'aide de FormaPlus. Une convention de stage est signée entre le stagiaire, l'entreprise et FormaPlus, et un tuteur suit le stagiaire sur place."
+  },
+  {
+    "id": "certification-examen",
+    "titre": "Obtenir le titre professionnel",
+    "motsCles": [
+      "examen",
+      "diplôme",
+      "certification",
+      "titre",
+      "jury",
+      "valider",
+      "évaluation",
+      "ccp",
+      "rater",
+      "échouer",
+      "raté",
+      "rate",
+      "final"
+    ],
+    "resume": "Un examen final devant un jury de professionnels, après des évaluations en cours de formation.",
+    "texte": "Le titre professionnel est un diplôme délivré par le ministère du Travail. Pendant la formation, des évaluations en cours de formation (ECF) mesurent la progression. L'examen final se passe devant un jury : le candidat présente une mise en situation professionnelle et son dossier professionnel. S'il rate une partie de l'examen, il peut quand même obtenir certains blocs de compétences (CCP) et repasser les autres plus tard."
+  },
+  {
+    "id": "accessibilite-handicap",
+    "titre": "Handicap et aménagements",
+    "motsCles": [
+      "handicap",
+      "rqth",
+      "aménagement",
+      "accessibilité",
+      "accessible",
+      "santé",
+      "dyslexie",
+      "adapter",
+      "référent"
+    ],
+    "resume": "Un référent handicap étudie les aménagements possibles avec chaque candidat.",
+    "texte": "FormaPlus dispose d'un référent handicap. Il échange avec le candidat, de façon confidentielle, pour étudier les aménagements possibles : rythme, supports adaptés, temps supplémentaire aux évaluations, accessibilité des locaux. Il peut aussi orienter vers l'Agefiph pour des aides complémentaires."
+  }
+]

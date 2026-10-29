@@ -67,6 +67,7 @@ export async function testPrompt(req, res) {
       removePreferences,
       refusedPreferences,
       usage,
+      sources,
     } = await generateAnswer(cleanPrompt, history, preferences);
 
     if (!answer) {
@@ -90,6 +91,7 @@ export async function testPrompt(req, res) {
         memorySent: preferences,
         historyCount: history.length,
         savedEntry: getSavedEntry(sessionId),
+        sources,
         usage,
       };
     }

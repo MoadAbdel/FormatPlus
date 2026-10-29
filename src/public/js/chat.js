@@ -1,4 +1,4 @@
-import { addMessage, addPreferenceMessages, addDebug } from "./chatMessages.js";
+import { addMessage } from "./chatMessages.js";
 
 const WELCOME_MESSAGE =
   "Bonjour et bienvenue chez FormaPlus. Je peux vous présenter nos formations, leurs prérequis, les étapes d’inscription et les financements possibles. Que souhaitez-vous savoir ?";
@@ -36,11 +36,6 @@ export function initChat() {
 
       typing.remove();
       addMessage("assistant", data.answer);
-      addPreferenceMessages(data);
-
-      if (data.debug) {
-        addDebug(data.debug);
-      }
     } catch (error) {
       typing.remove();
       addMessage("error", error.message);
